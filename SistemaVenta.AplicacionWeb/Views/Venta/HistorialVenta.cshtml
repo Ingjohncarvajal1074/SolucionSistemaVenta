@@ -15,9 +15,15 @@
     <!-- ============================================================
     =SCRIPTS PARA ESTA PAGINA
     ===============================================================-->
+    <script>
+        const urlGetHistorialVenta = '@Url.Action("Historial", "Venta")';
+        const urlListarVenta = '@Url.Action("ListarVenta", "Venta")';
+        const urlListarDetalleVenta = '@Url.Action("ListarDetalleVenta", "Venta")';
+    </script>
 
     <script src="~/vendor/jquery-ui/jquery-ui.js"></script>
-    <script src="~/vendor/jquery-ui/idioma/datepicker-es.js"></script>
+    <script src="~/vendor/jquery-ui/idioma/datepicker-es.js"></script>   
+    <script src="~/js/vistas/historial_venta.js"></script>
 }
 
 
@@ -66,17 +72,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>27/04/2022</td>
-                            <td>00001</td>
-                            <td>Boleta</td>
-                            <td>101010</td>
-                            <td>jose</td>
-                            <td>2000</td>
-                            <td><button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalData"><i class="fas fa-eye"></i> Ver Detalle</button></td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
 

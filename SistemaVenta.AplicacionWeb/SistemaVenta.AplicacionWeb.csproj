@@ -7,8 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\vistas\Historial_Venta.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\vistas\Historial_Venta.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\vistas\Historial_Venta.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
   </ItemGroup>
 
@@ -16,6 +29,22 @@
     <ProjectReference Include="..\SistemaVenta.BLL\SistemaVenta.BLL.csproj" />
     <ProjectReference Include="..\SistemaVenta.Entity\SistemaVenta.Entity.csproj" />
     <ProjectReference Include="..\SistemaVenta.IOC\SistemaVenta.IOC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utilidades\LibreriaPDF\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -51,6 +51,7 @@ namespace SistemaVenta.AplicacionWeb.Controllers
             try
             {
                 modelo.IdUsuario = 1;
+                modelo.FechaRegistro = DateTime.Now.ToString();
                 Venta ventaCreada = await _ventaServicio.Registrar(_mapper.Map<Venta>(modelo));
                 modelo = _mapper.Map<VMVenta>(ventaCreada);
 
@@ -71,8 +72,16 @@ namespace SistemaVenta.AplicacionWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Historial(string numeroVenta, string fechaInicio, string fechaFin)
         {
-            List<VMVenta> vmHistorialVenta = _mapper.Map<List<VMVenta>>(await _ventaServicio.Historial(numeroVenta, fechaInicio, fechaFin));
-            return StatusCode(StatusCodes.Status200OK, vmHistorialVenta);
+            try
+            {
+                List<VMVenta> vmHistorialVenta = _mapper.Map<List<VMVenta>>(await _ventaServicio.Historial(numeroVenta, fechaInicio, fechaFin));
+                return StatusCode(StatusCodes.Status200OK, vmHistorialVenta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "error");               
+            }
+           
         }
     }
 }
