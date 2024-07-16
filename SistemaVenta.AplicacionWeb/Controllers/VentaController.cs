@@ -6,6 +6,9 @@ using SistemaVenta.AplicacionWeb.Utilidades.Response;
 using SistemaVenta.BLL.Interfaces;
 using SistemaVenta.Entity;
 
+using DinkToPdf;
+using DinkToPdf.Contracts;
+
 namespace SistemaVenta.AplicacionWeb.Controllers
 {
     public class VentaController : Controller
@@ -13,12 +16,14 @@ namespace SistemaVenta.AplicacionWeb.Controllers
         private readonly ITipoDocumentoVentaService _tipoDocumentoVentaServicio;
         private readonly IVentaService _ventaServicio;
         private readonly IMapper _mapper;
+        private readonly IConverter _converter;
 
-        public VentaController(ITipoDocumentoVentaService tipoDocumentoVentaServicio, IVentaService ventaServicio, IMapper mapper)
+        public VentaController(ITipoDocumentoVentaService tipoDocumentoVentaServicio, IVentaService ventaServicio, IMapper mapper, IConverter converter)
         {
             _tipoDocumentoVentaServicio = tipoDocumentoVentaServicio;
-            _ventaServicio=ventaServicio;
+            _ventaServicio = ventaServicio;
             _mapper = mapper;
+            _converter = converter;
         }
 
 
@@ -82,6 +87,46 @@ namespace SistemaVenta.AplicacionWeb.Controllers
                 return StatusCode(StatusCodes.Status404NotFound, "error");               
             }
            
+        }
+        public IActionResult MostrarPDFVenta(string numeroVenta)
+        {
+            //Esto es para obtener la url de nuestra plantilla de la vista
+            string urlPlantillaVista = $"{this.Request.Scheme}://{this.Request.Host}/Plantilla/PDFVenta?numeroVenta={numeroVenta}";
+            
+            var client = new HttpClient();
+            var html = client.GetStringAsync(urlPlantillaVista);
+            
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = new GlobalSettings() {                   
+                    PaperSize = PaperKind.A4,
+                    Orientation = Orientation.Portrait,
+                },
+                Objects = {
+                    new ObjectSettings()
+                    {
+                        
+                        HtmlContent = html.Result,
+                        WebSettings = new WebSettings
+                        {
+                            DefaultEncoding = "utf-8",
+                        },
+                    }
+                }
+            };
+            var archivoPDF = _converter.Convert(pdf);
+
+            if (archivoPDF == null || archivoPDF.Length == 0)
+            {
+                return StatusCode(500, "Error al generar el PDF");
+            }
+            else
+            {
+                return File(archivoPDF, "application/pdf");
+            }
+
+           
+            
         }
     }
 }

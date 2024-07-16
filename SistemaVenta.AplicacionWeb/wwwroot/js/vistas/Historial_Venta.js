@@ -117,5 +117,6 @@ $("#tbventa tbody").on("click", ".btn-info", function () {
             )
         )
     });
+    $("#linkImprimir").attr("href", `${urlImprimirVenta}?numeroVenta=${d.numeroVenta}`);
     $("#modalData").modal("show");
 });
