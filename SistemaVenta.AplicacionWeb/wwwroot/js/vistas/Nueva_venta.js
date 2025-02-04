@@ -193,8 +193,8 @@ function MostrarProductoPrecios() {
     $("#txtTotal").val(total.toFixed(2));
 
 }
-$(document).on("click", "button.btn-eliminar", function () {
-    const _idproducto = $(this).attr("id")
+$(document).on("click", "button .btn-eliminar", function () {
+    const _idproducto = parseInt($(this).attr("id"));
     productosParaVenta = productosParaVenta.filter((item) => item.idProducto !== parseInt(_idproducto));
     MostrarProductoPrecios();
 })

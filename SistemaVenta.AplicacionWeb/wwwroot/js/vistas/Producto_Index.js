@@ -10,6 +10,7 @@
     precio: "",
     esActivo: 1,
 }
+// Cadena de conexion "ConexionOracle": "User ID=USR_SGP; Password=Policia2016; Data Source=172.28.18.38:1521/TELEPOL_TEST; Max Pool Size=5000; PERSIST SECURITY INFO=True;"
 
 d.addEventListener("DOMContentLoaded", () => {
     F_getCategorias();
