@@ -8,5 +8,9 @@ namespace SistemaVenta.AplicacionWeb.Controllers
         {
             return View();
         }
+        public IActionResult Diagnostico()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,385 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Estilos {
+    <!-- ============================================================
+    =ESTILOS PARA ESTA PAGINA
+    ===============================================================-->
+    <link rel="stylesheet" href="~/vendor/datatables/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="~/vendor/jquery-ui/jquery-ui.css">
+}
+
+@section Scripts {
+    <!-- ============================================================
+        =SCRIPTS PARA ESTA PAGINA
+        ===============================================================-->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/jszip.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.html5.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.print.min.js"></script>
+
+    <script src="~/vendor/jquery-ui/jquery-ui.js"></script>
+    <script src="~/vendor/jquery-ui/idioma/datepicker-es.js"></script>
+
+    <!-- SOLO ES DE EJEMPLO - IGNORAR -->
+    <script src="~/js/vistas/datatables-demo.js"></script>
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 bg-second-primary">
+        <h6 class="m-0 font-weight-bold text-white">Reporte de Ventas</h6>
+    </div>
+    <div class="card-body">
+        <div class="form-row align-items-end">
+
+            <div class="form-group col-sm-3">
+                <label for="txtFechaInicio">Fecha Inicio</label>
+                <input type="text" class="form-control form-control-sm" id="txtFechaInicio">
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="txtFechaFin">Fecha Fin</label>
+                <input type="text" class="form-control form-control-sm" id="txtFechaFin">
+            </div>
+            <div class="form-group col-sm-3">
+                <button type="button" class="btn btn-primary btn-block btn-sm" id="btnBuscar"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="tbdata" class="table table-sm table-striped" cellspacing="0" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Fecha Registro</th>
+                            <th scope="col">Numero Venta</th>
+                            <th scope="col">Tipo Documento</th>
+                            <th scope="col">Documento Cliente</th>
+                            <th scope="col">Nombre Cliente</th>
+                            <th scope="col">Sub Total Venta</th>
+                            <th scope="col">Impuesto Total Venta</th>
+                            <th scope="col">Total Venta</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h1>MATRIZ DE DIAGNÓSTICO - SISTEMAS DE INFORMACIÓN</h1>
+        <p>Policía Nacional de Colombia - Evaluación de Interoperabilidad</p>
+    </div>
+
+    <div class="instructions">
+        <h3>📋 Instrucciones</h3>
+        <p><strong>Objetivo:</strong> Recopilar información técnica y funcional de todos los sistemas de información para evaluar viabilidad de integración e interoperabilidad.</p>
+        <p><strong>Dirigido a:</strong> Administradores y responsables técnicos de cada sistema de información institucional.</p>
+        <p><strong>Instrucciones:</strong> Complete todos los campos aplicables. Use "N/A" para campos no aplicables y "En evaluación" para información pendiente.</p>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="addSystem()">➕ Agregar Sistema</button>
+        <button class="btn" onclick="clearData()">🗑️ Limpiar Datos</button>
+        <button class="btn btn-success" onclick="exportData()">📊 Exportar a Excel</button>
+        <button class="btn" onclick="saveData()">💾 Guardar Progreso</button>
+        <button class="btn" onclick="loadData()">📂 Cargar Datos</button>
+        <span class="system-count">Sistemas registrados: <span id="systemCount">3</span></span>
+    </div>
+
+    <div class="table-container">
+        <table id="diagnosticTable">
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 80px;">Sistema #</th>
+                    <th colspan="6" class="section-header">INFORMACIÓN BÁSICA</th>
+                    <th colspan="7" class="section-header">ARQUITECTURA TÉCNICA</th>
+                    <th colspan="6" class="section-header">CONECTIVIDAD E INTEGRACIÓN</th>
+                    <th colspan="5" class="section-header">DATOS Y ESTRUCTURA</th>
+                    <th colspan="5" class="section-header">OPERACIÓN Y GOBERNANZA</th>
+                    <th colspan="4" class="section-header">CALIDAD Y RENDIMIENTO</th>
+                    <th colspan="3" class="section-header">ASPECTOS ADMINISTRATIVOS</th>
+                    <th rowspan="2" style="width: 60px;">Acciones</th>
+                </tr>
+                <tr>
+                    <!-- Información Básica -->
+                    <th style="width: 120px;">Nombre del Sistema</th>
+                    <th style="width: 100px;">Acrónimo/Sigla</th>
+                    <th style="width: 80px;">Versión Actual</th>
+                    <th style="width: 150px;">Propósito Principal</th>
+                    <th style="width: 80px;">Usuarios Activos</th>
+                    <th style="width: 120px;">Responsable Técnico</th>
+
+                    <!-- Arquitectura Técnica -->
+                    <th style="width: 100px;">Tipo de Plataforma</th>
+                    <th style="width: 100px;">Sistema Operativo</th>
+                    <th style="width: 100px;">Base de Datos</th>
+                    <th style="width: 100px;">Lenguaje Programación</th>
+                    <th style="width: 100px;">Servidor Aplicaciones</th>
+                    <th style="width: 100px;">Tipo de Arquitectura</th>
+                    <th style="width: 80px;">Año Implementación</th>
+
+                    <!-- Conectividad -->
+                    <th style="width: 80px;">APIs Disponibles</th>
+                    <th style="width: 100px;">Servicios Web</th>
+                    <th style="width: 100px;">Protocolos Comunicación</th>
+                    <th style="width: 120px;">Integraciones Actuales</th>
+                    <th style="width: 100px;">Formatos Intercambio</th>
+                    <th style="width: 100px;">Tipo de Red</th>
+
+                    <!-- Datos -->
+                    <th style="width: 100px;">Entidades Principales</th>
+                    <th style="width: 80px;">Volumen Registros</th>
+                    <th style="width: 100px;">Frecuencia Actualización</th>
+                    <th style="width: 100px;">Formatos Codificación</th>
+                    <th style="width: 100px;">Backup/Respaldo</th>
+
+                    <!-- Operación -->
+                    <th style="width: 100px;">Proveedor Soporte</th>
+                    <th style="width: 80px;">Contrato Vigente</th>
+                    <th style="width: 100px;">Autenticación</th>
+                    <th style="width: 100px;">Logs Auditoría</th>
+                    <th style="width: 100px;">Horario Operación</th>
+
+                    <!-- Calidad -->
+                    <th style="width: 100px;">Validación Datos</th>
+                    <th style="width: 80px;">Tiempo Respuesta</th>
+                    <th style="width: 80px;">Usuarios Concurrentes</th>
+                    <th style="width: 120px;">Problemas Recurrentes</th>
+
+                    <!-- Administrativos -->
+                    <th style="width: 100px;">Costo Licenciamiento</th>
+                    <th style="width: 100px;">Costo Mantenimiento</th>
+                    <th style="width: 120px;">Documentación Técnica</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td>1</td>
+                    <!-- Información Básica -->
+                    <td><input type="text" placeholder="Ej: SIEDCO"></td>
+                    <td><input type="text" placeholder="Ej: SIEDCO"></td>
+                    <td><input type="text" placeholder="Ej: v2.5.1"></td>
+                    <td><textarea placeholder="Describir propósito principal del sistema"></textarea></td>
+                    <td><input type="number" placeholder="Cantidad"></td>
+                    <td><input type="text" placeholder="Nombre y cargo"></td>
+
+                    <!-- Arquitectura Técnica -->
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Web">Web</option>
+                            <option value="Escritorio">Escritorio</option>
+                            <option value="Móvil">Móvil</option>
+                            <option value="Híbrida">Híbrida</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Windows Server">Windows Server</option>
+                            <option value="Linux">Linux</option>
+                            <option value="Unix">Unix</option>
+                            <option value="AIX">AIX</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Oracle">Oracle</option>
+                            <option value="SQL Server">SQL Server</option>
+                            <option value="MySQL">MySQL</option>
+                            <option value="PostgreSQL">PostgreSQL</option>
+                            <option value="MongoDB">MongoDB</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Ej: Java, .NET, PHP"></td>
+                    <td><input type="text" placeholder="Ej: Tomcat, IIS, Apache"></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Monolítica">Monolítica</option>
+                            <option value="Microservicios">Microservicios</option>
+                            <option value="SOA">SOA</option>
+                            <option value="Cliente-Servidor">Cliente-Servidor</option>
+                        </select>
+                    </td>
+                    <td><input type="number" placeholder="Año"></td>
+
+                    <!-- Conectividad -->
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Sí - REST">Sí - REST</option>
+                            <option value="Sí - SOAP">Sí - SOAP</option>
+                            <option value="Sí - Ambos">Sí - Ambos</option>
+                            <option value="No">No</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Describir servicios web"></td>
+                    <td><input type="text" placeholder="HTTP, HTTPS, FTP, etc."></td>
+                    <td><textarea placeholder="Sistemas con los que se integra actualmente"></textarea></td>
+                    <td><input type="text" placeholder="XML, JSON, CSV, etc."></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Intranet">Intranet</option>
+                            <option value="Internet">Internet</option>
+                            <option value="VPN">VPN</option>
+                            <option value="Red Privada">Red Privada</option>
+                        </select>
+                    </td>
+
+                    <!-- Datos -->
+                    <td><textarea placeholder="Principales entidades/tablas del sistema"></textarea></td>
+                    <td><input type="text" placeholder="Ej: 1M registros"></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Tiempo Real">Tiempo Real</option>
+                            <option value="Diaria">Diaria</option>
+                            <option value="Semanal">Semanal</option>
+                            <option value="Mensual">Mensual</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="UTF-8, ASCII, etc."></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Diario">Diario</option>
+                            <option value="Semanal">Semanal</option>
+                            <option value="Mensual">Mensual</option>
+                            <option value="Manual">Manual</option>
+                        </select>
+                    </td>
+
+                    <!-- Operación -->
+                    <td><input type="text" placeholder="Empresa proveedora"></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Vigente">Vigente</option>
+                            <option value="Vencido">Vencido</option>
+                            <option value="Sin Contrato">Sin Contrato</option>
+                            <option value="En Renovación">En Renovación</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Active Directory">Active Directory</option>
+                            <option value="LDAP">LDAP</option>
+                            <option value="Base de Datos">Base de Datos</option>
+                            <option value="Biométrico">Biométrico</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Completos">Completos</option>
+                            <option value="Parciales">Parciales</option>
+                            <option value="No Disponibles">No Disponibles</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="24/7, 8x5, etc."></td>
+
+                    <!-- Calidad -->
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Automática">Automática</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Mixta">Mixta</option>
+                            <option value="Sin Validación">Sin Validación</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Ej: < 3 seg"></td>
+                    <td><input type="number" placeholder="Cantidad"></td>
+                    <td><textarea placeholder="Describir problemas recurrentes"></textarea></td>
+
+                    <!-- Administrativos -->
+                    <td><input type="text" placeholder="Valor anual"></td>
+                    <td><input type="text" placeholder="Valor anual"></td>
+                    <td>
+                        <select>
+                            <option value="">Seleccionar</option>
+                            <option value="Completa">Completa</option>
+                            <option value="Parcial">Parcial</option>
+                            <option value="Desactualizada">Desactualizada</option>
+                            <option value="No Disponible">No Disponible</option>
+                        </select>
+                    </td>
+
+                    <td><button class="btn" onclick="removeSystem(this)" style="padding: 5px 10px; font-size: 10px;">🗑️</button></td>
+                </tr>
+
+                <!-- Sistemas de ejemplo -->
+                <tr>
+                    <td>2</td>
+                    <td><input type="text" placeholder="Ej: SICAT"></td>
+                    <td><input type="text" placeholder="Ej: SICAT"></td>
+                    <td><input type="text" placeholder="Ej: v1.2.0"></td>
+                    <td><textarea placeholder="Describir propósito principal del sistema"></textarea></td>
+                    <td><input type="number" placeholder="Cantidad"></td>
+                    <td><input type="text" placeholder="Nombre y cargo"></td>
+
+                    <td><select><option value="">Seleccionar</option><option value="Web">Web</option><option value="Escritorio">Escritorio</option><option value="Móvil">Móvil</option><option value="Híbrida">Híbrida</option></select></td>
+                    <td><select><option value="">Seleccionar</option><option value="Windows Server">Windows Server</option><option value="Linux">Linux</option><option value="Unix">Unix</option><option value="AIX">AIX</option></select></td>
+                    <td><select><option value="">Seleccionar</option><option value="Oracle">Oracle</option><option value="SQL Server">SQL Server</option><option value="MySQL">MySQL</option><option value="PostgreSQL">PostgreSQL</option><option value="MongoDB">MongoDB</option></select></td>
+                    <td><input type="text" placeholder="Ej: Java, .NET, PHP"></td>
+                    <td><input type="text" placeholder="Ej: Tomcat, IIS, Apache"></td>
+                    <td><select><option value="">Seleccionar</option><option value="Monolítica">Monolítica</option><option value="Microservicios">Microservicios</option><option value="SOA">SOA</option><option value="Cliente-Servidor">Cliente-Servidor</option></select></td>
+                    <td><input type="number" placeholder="Año"></td>
+
+                    <td><select><option value="">Seleccionar</option><option value="Sí - REST">Sí - REST</option><option value="Sí - SOAP">Sí - SOAP</option><option value="Sí - Ambos">Sí - Ambos</option><option value="No">No</option></select></td>
+                    <td><input type="text" placeholder="Describir servicios web"></td>
+                    <td><input type="text" placeholder="HTTP, HTTPS, FTP, etc."></td>
+                    <td><textarea placeholder="Sistemas con los que se integra actualmente"></textarea></td>
+                    <td><input type="text" placeholder="XML, JSON, CSV, etc."></td>
+                    <td><select><option value="">Seleccionar</option><option value="Intranet">Intranet</option><option value="Internet">Internet</option><option value="VPN">VPN</option><option value="Red Privada">Red Privada</option></select></td>
+
+                    <td><textarea placeholder="Principales entidades/tablas del sistema"></textarea></td>
+                    <td><input type="text" placeholder="Ej: 1M registros"></td>
+                    <td><select><option value="">Seleccionar</option><option value="Tiempo Real">Tiempo Real</option><option value="Diaria">Diaria</option><option value="Semanal">Semanal</option><option value="Mensual">Mensual</option><option value="Manual">Manual</option></select></td>
+                    <td><input type="text" placeholder="UTF-8, ASCII, etc."></td>
+                    <td><select><option value="">Seleccionar</option><option value="Diario">Diario</option><option value="Semanal">Semanal</option><option value="Mensual">Mensual</option><option value="Manual">Manual</option></select></td>
+
+                    <td><input type="text" placeholder="Empresa proveedora"></td>
+                    <td><select><option value="">Seleccionar</option><option value="Vigente">Vigente</option><option value="Vencido">Vencido</option><option value="Sin Contrato">Sin Contrato</option><option value="En Renovación">En Renovación</option></select></td>
+                    <td><select><option value="">Seleccionar</option><option value="Active Directory">Active Directory</option><option value="LDAP">LDAP</option><option value="Base de Datos">Base de Datos</option><option value="Biométrico">Biométrico</option></select></td>
+                    <td><select><option value="">Seleccionar</option><option value="Completos">Completos</option><option value="Parciales">Parciales</option><option value="No Disponibles">No Disponibles</option></select></td>
+                    <td><input type="text" placeholder="24/7, 8x5, etc."></td>
+
+                    <td><select><option value="">Seleccionar</option><option value="Automática">Automática</option><option value="Manual">Manual</option><option value="Mixta">Mixta</option><option value="Sin Validación">Sin Validación</option></select></td>
+                    <td><input type="text" placeholder="Ej: < 3 seg"></td>
+                    <td><input type="number" placeholder="Cantidad"></td>
+                    <td><textarea placeholder="Describir problemas recurrentes"></textarea></td>
+
+                    <td><input type="text" placeholder="Valor anual"></td>
+                    <td><input type="text" placeholder="Valor anual"></td>
+                    <td><select><option value="">Seleccionar</option><option value="Completa">Completa</option><option value="Parcial">Parcial</option><option value="Desactualizada">Desactualizada</option><option value="No Disponible">No Disponible</option></select></td>
+
+                    <td><button class="btn" onclick="removeSystem(this)" style="padding: 5px 10px; font-size: 10px;">🗑️</button></td>
+                </tr>
+            </tbody>
+               
+</div>

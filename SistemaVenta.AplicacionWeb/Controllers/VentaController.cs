@@ -99,8 +99,9 @@ namespace SistemaVenta.AplicacionWeb.Controllers
             var pdf = new HtmlToPdfDocument()
             {
                 GlobalSettings = new GlobalSettings() {                   
-                    PaperSize = PaperKind.A4,
+                    PaperSize = PaperKind.Letter,
                     Orientation = Orientation.Portrait,
+
                 },
                 Objects = {
                     new ObjectSettings()
