@@ -7,10 +7,6 @@ namespace SistemaVenta.AplicacionWeb.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-        public IActionResult Diagnostico()
-        {
-            return View();
-        }
+        }       
     }
 }
