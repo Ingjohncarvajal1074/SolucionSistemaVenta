@@ -1,9 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using AutoMapper;
+using SistemaVenta.AplicacionWeb.Models.ViewModels;
+using SistemaVenta.BLL.Interfaces;
+
 namespace SistemaVenta.AplicacionWeb.Controllers
 {
     public class ReporteController : Controller
     {
+        private readonly IMapper _mapper;
+        private readonly IVentaService _ventaServicio;
+
+        public ReporteController(IMapper mapper, IVentaService ventaServicio)
+        {
+            _mapper = mapper;
+            _ventaServicio = ventaServicio;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReporteVenta(string fechaInicio, string fechaFin)
+        {
+            List<VMReporteVenta> vmLista = _mapper.Map<List<VMReporteVenta>>(await _ventaServicio.Reporte(fechaInicio, fechaFin));
+            return StatusCode(StatusCodes.Status200OK, new { data = vmLista });
+        }
+
         public IActionResult Index()
         {
             return View();

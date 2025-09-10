@@ -33,6 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contexts\Implementations\" />
+    <Folder Include="Contexts\Interfaces\" />
+    <Folder Include="Models\DTOs\" />
+    <Folder Include="Protocols\Implementations\" />
+    <Folder Include="Protocols\Interfaces\" />
     <Folder Include="Utilidades\LibreriaPDF\" />
   </ItemGroup>
 
