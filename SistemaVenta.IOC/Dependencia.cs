@@ -36,6 +36,7 @@ namespace SistemaVenta.IOC
             services.AddScoped<IProductoService, ProductoService>();
             services.AddScoped<ITipoDocumentoVentaService, TipoDocumentoVentaService>();
             services.AddScoped<IVentaService, VentaService>();
+            services.AddScoped<IDashBoardService, DashBoardService>();
         }
     }
 }
