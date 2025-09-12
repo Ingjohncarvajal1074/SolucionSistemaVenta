@@ -47,10 +47,10 @@ namespace SistemaVenta.AplicacionWeb.Controllers
 
                 foreach (KeyValuePair<string, int> item in await _dashBoardServicio.ProductosTopUltimaSemana())
                 {
-                    listaVentasSemana.Add(new VMVentasSemana
+                    listaProductosSemana.Add(new VMProductosSemana
                     {
-                        Fecha = item.Key,
-                        Total = item.Value
+                        Producto = item.Key,
+                        Cantidad = item.Value
                     });
                 }
 
