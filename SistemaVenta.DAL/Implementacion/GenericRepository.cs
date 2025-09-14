@@ -42,9 +42,9 @@ namespace SistemaVenta.DAL.Implementacion
                 await _dbContext.SaveChangesAsync();
                 return entidad;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }           
         }
 
