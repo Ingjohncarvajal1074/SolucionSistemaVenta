@@ -4,10 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Scripts {
-    <script src="~/js/vistas/home_perfil.js"></script>
+    <script src="~/js/vistas/Home_perfil.js"></script>
     <!-- Enrutar -->
     <script>
         const urlGetUsuario = '@Url.Action("ObtenerUsuario", "Home", new { area = "" })';
+        const urlInsPerfil = '@Url.Action("GuardarPerfil", "Home", new { area = "" })';
+        const urlUpdClave = '@Url.Action("CambiarClave", "Home", new { area = "" })';
     </script>
 }
 
@@ -40,8 +42,8 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-sm-12">
-                            <label for="txTelefono">Telefono</label>
-                            <input type="text" class="form-control form-control-sm input-validar" id="txTelefono">
+                            <label for="txtTelefono">Telefono</label>
+                            <input type="text" class="form-control form-control-sm input-validar" id="txtTelefono">
                         </div>
                     </div>
                     <div class="form-row">

@@ -1,4 +1,5 @@
 ﻿let $btnGuardar = d.getElementById("btnGuardarCambios");
+let $btnCambiarClave = d.getElementById("btnCambiarClave");
 d.addEventListener("DOMContentLoaded", () => {
     $(".container-fluid").LoadingOverlay("show");
     F_getUsuario();
@@ -18,7 +19,7 @@ async function F_getUsuario() {
             $("#imgFoto").attr("src", r.urlFoto);
             $("#txtNombre").val(r.nombre);
             $("#txtCorreo").val(r.correo);
-            $("#txTelefono").val(r.telefono);
+            $("#txtTelefono").val(r.telefono);
             $("#txtRol").val(r.nombreRol);
 
             
@@ -35,7 +36,7 @@ async function F_getUsuario() {
 $btnGuardar.addEventListener("click", () => {
 
     let correo = d.getElementById("txtCorreo");
-    let telefono = d.getElementById("txTelefono");
+    let telefono = d.getElementById("txtTelefono");
     let mensaje = "campo vacio";
     if (correo.value.trim() == "") {
         toastr.warning("", mensaje);
@@ -46,70 +47,90 @@ $btnGuardar.addEventListener("click", () => {
         telefono.focus();
     }
 
+    swal({
+        title: "¿Desea guardar los cambios3?",       
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-primary",
+        confirmButtonText: "Si",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: true,
+    },
+        function (respuesta) {
+            if (respuesta) {
+                $(".showSweetAlert").LoadingOverlay("show");
 
-    /*
-    const modelo = structuredClone(MODELO_BASE);
-    modelo["idUsuario"] = $("#txtId").val();
-    modelo["nombre"] = $("#txtNombre").val();
-    modelo["correo"] = $("#txtCorreo").val();
-    modelo["telefono"] = $("#txtTelefono").val();
-    modelo["idRol"] = $("#cboRol").val();
-    modelo["esActivo"] = $("#cboEstado").val();
+                const modelo = {
+                    correo : $("#txtCorreo").val().trim(),
+                    telefono : $("#txtTelefono").val().trim()
+                }
 
-    const inputFoto = d.getElementById("txtFoto");
-    const formData = new FormData();
-    formData.append("foto", inputFoto.files[0]);
-    formData.append("modelo", JSON.stringify(modelo));
-
-    $("#modalData").find("div.modal-content").LoadingOverlay("show");
-    if (modelo.idUsuario == 0) {
-        try {
-            fetch(urlSaveUser, {
-                method: 'POST', // Reemplaza con el método HTTP deseado (GET, POST, PUT, DELETE)
-                body: formData
-            })
-                .then(response => {
-                    $("#modalData").find("div.modal-content").LoadingOverlay("hide");
-                    return response.ok ? response.json() : Promise.reject(response);
-                })
-                .then(responseJson => {
-                    if (responseJson.estado) {
-                        F_getUsuariosAll();
-                        //tablaData.row.add(responseJson.Objeto).draw(false);
-                        $("#modalData").modal("hide");
-                        swal("Listo!", "El usuario fue creado", "success");
-                    } else {
-                        swal("Lo sentimos!", responseJson.mensaje, "error");
-                    }
-                })
-        } catch (e) {
-            console.error(`Error: Mensaje = ${e.message} ${e.status}`);
+                try {
+                    fetch(urlInsPerfil, {
+                        method: 'POST', // Reemplaza con el método HTTP deseado (GET, POST, PUT, DELETE)
+                        headers: { "Content-Type": "application/json; charset=utf-8" },
+                        body: JSON.stringify(modelo)
+                    })
+                        .then(response => {
+                            $(".showSweetAlert").LoadingOverlay("hide");
+                            return response.ok ? response.json() : Promise.reject(response);
+                        })
+                        .then(responseJson => {
+                            if (responseJson.estado) {                                
+                                swal("Listo!", "Los cambios fueron guardados", "success");
+                            } else {
+                                swal("Lo sentimos!", responseJson.mensaje, "error");
+                            }
+                        })
+                } catch (e) {
+                    console.error(`Error: Mensaje = ${e.message} ${e.status}`);
+                }
+            }
         }
+    )
 
-    } else {
-        try {
-            fetch(urlEditUser, {
-                method: 'PUT', // Reemplaza con el método HTTP deseado (GET, POST, PUT, DELETE)
-                body: formData
+})
+
+$btnCambiarClave.addEventListener("click", () => {
+    const inputs = $("input.input-validar").serializeArray();
+    const inputsSinValor = inputs.filter((item) => item.value.trim() == "");
+    if (inputsSinValor.length > 0) {
+        const mensaje = `Debe completar el campo: </br>"${inputsSinValor[0].name}"`;
+        toastr.error("", mensaje);
+        $(`input[name="${inputsSinValor[0].name}"]`).focus();
+        return;
+    }
+    if ($("#txtClaveNueva").val().trim() != $("#txtConfirmarClave").val().trim()) {       
+        toastr.warning("", "Las contraseñas no coinciden");
+        return;
+    }
+    let modelo = {
+        claveActual: $("#txtClaveActual").val().trim(),
+        claveNueva: $("#txtClaveNueva").val().trim()
+    }
+    try {
+        fetch(urlUpdClave, {
+            method: 'POST', // Reemplaza con el método HTTP deseado (GET, POST, PUT, DELETE)
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify(modelo)
+        })
+            .then(response => {
+                $(".showSweetAlert").LoadingOverlay("hide");
+                return response.ok ? response.json() : Promise.reject(response);
             })
-                .then(response => {
-                    $("#modalData").find("div.modal-content").LoadingOverlay("hide");
-                    return response.ok ? response.json() : Promise.reject(response);
-                })
-                .then(responseJson => {
-                    if (responseJson.estado) {
-                        F_getUsuariosAll();
-                        //tablaData.row(filaSeleccionada).data(responseJson.objeto).draw(false);
-                        filaSeleccionada = null;
-                        $("#modalData").modal("hide");
-                        swal("Listo!", "El usuario fue modificado", "success");
-                    } else {
-                        swal("Lo sentimos!", responseJson.mensaje, "error");
-                    }
-                })
-        } catch (e) {
-            console.error(`Error: Mensaje = ${e.message} ${e.status}`);
-        }
-    }*/
-
+            .then(responseJson => {
+                if (responseJson.estado) {
+                    swal("Listo!", "Su contraseña fue actualizada", "success");
+                    const inputs = $("input.input-validar").serializeArray();
+                    inputs.forEach(item => {
+                        $(`input[name="${item.name}"]`).val("");
+                    });
+                } else {
+                    swal("Lo sentimos!", responseJson.mensaje, "error");
+                }
+            })
+    } catch (e) {
+        console.error(`Error: Mensaje = ${e.message} ${e.status}`);
+    }
 })
