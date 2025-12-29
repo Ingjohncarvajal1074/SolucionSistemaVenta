@@ -12,6 +12,6 @@
         public string? PaginaAccion { get; set; }
            
 
-        public virtual ICollection<VMMenu> Submenus { get; set; }
+        public virtual ICollection<VMMenu> SubMenus { get; set; }
     }
 }

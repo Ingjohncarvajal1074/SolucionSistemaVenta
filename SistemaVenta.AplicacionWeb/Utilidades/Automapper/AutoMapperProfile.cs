@@ -142,7 +142,7 @@ namespace SistemaVenta.AplicacionWeb.Utilidades.Automapper
 
             #region Menu
             CreateMap<Menu, VMMenu>()
-                .ForMember(destino => destino.Submenus,
+                .ForMember(destino => destino.SubMenus,
                 opt => opt.MapFrom(origen => origen.InverseIdMenuPadreNavigation));
             #endregion
         }
