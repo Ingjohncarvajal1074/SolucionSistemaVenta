@@ -16,6 +16,7 @@ namespace SistemaVenta.AplicacionWeb.Models.ViewModels
 
         public string? NombreRol { get; set; }
         public string? UrlFoto { get; set; }
+        public string? Clave { get; set; }
 
         public int? EsActivo { get; set; }
         

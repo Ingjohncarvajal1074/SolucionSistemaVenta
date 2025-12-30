@@ -66,7 +66,7 @@ namespace SistemaVenta.AplicacionWeb.Controllers
                 vmUsuario = _mapper.Map<VMUsuario>(usuario_creado);
 
                 gResponse.Estado = true;
-                gResponse.Objeto = vmUsuario;
+                gResponse.Objeto = vmUsuario;                
 
             }
             catch (Exception ex)

@@ -47,10 +47,23 @@ namespace SistemaVenta.AplicacionWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Salir()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Acceso");
+                
+                // Prevenir caché
+                Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+                Response.Headers["Pragma"] = "no-cache";
+                Response.Headers["Expires"] = "0";
+    
+                return Content(@"
+                    <script>
+                        window.open('/Acceso/Login', '_blank');
+                        window.close();
+                    </script>
+                ", "text/html");
+            //return RedirectToAction("Login", "Acceso");
         }
         [HttpGet]
         public async Task<IActionResult> ObtenerUsuario()

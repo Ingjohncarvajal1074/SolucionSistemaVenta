@@ -177,7 +177,7 @@ $btnGuardar.addEventListener("click", () => {
                         F_getUsuariosAll();
                         //tablaData.row.add(responseJson.Objeto).draw(false);
                         $("#modalData").modal("hide");
-                        swal("Listo!", "El usuario fue creado", "success");
+                        swal("Listo!", `Por favor cambie su contraseña temporal ${responseJson.objeto.clave}`, "success");
                     } else {
                         swal("Lo sentimos!", responseJson.mensaje, "error");
                     }

@@ -100,11 +100,12 @@ namespace SistemaVenta.BLL.Implementacion
                     }
                     if (htmlCorreo != "")
                     {
-                        await _correoService.EnviarCorreo(usuario_creado.Correo, "Cuenta Creada", htmlCorreo);
+                        //await _correoService.EnviarCorreo(usuario_creado.Correo, "Cuenta Creada", htmlCorreo);
                     }
                 }
                 IQueryable<Usuario> query = await _repository.Consultar(u => u.IdUsuario == usuario_creado.IdUsuario);
                 usuario_creado = query.Include(r=> r.IdRolNavigation).First();
+                usuario_creado.Clave = clave_generada;
 
                 return usuario_creado;
             }
