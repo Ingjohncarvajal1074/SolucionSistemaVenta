@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SistemaVenta.AplicacionWeb.Models.ViewModels;
 using SistemaVenta.BLL.Interfaces;
 using SistemaVenta.Entity;
-
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace SistemaVenta.AplicacionWeb.Controllers
@@ -22,6 +21,7 @@ namespace SistemaVenta.AplicacionWeb.Controllers
 
         public IActionResult Login()
         {
+
             ClaimsPrincipal claimUser = HttpContext.User;
             if (claimUser.Identity.IsAuthenticated)
             {
@@ -30,8 +30,9 @@ namespace SistemaVenta.AplicacionWeb.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(VMUsuarioLogin modelo)
+        public async Task<IActionResult> Login(VMUsuarioLogin modelo, string returnUrl = null)
         {
+            
             if (string.IsNullOrWhiteSpace(modelo.Correo) || string.IsNullOrWhiteSpace(modelo.Clave))
             {
                 ModelState.AddModelError(string.Empty, "El correo y la clave son obligatorios.");
