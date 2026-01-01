@@ -87,8 +87,38 @@
 
     </div>
 
-   
 
+    <script>
+        (function() {
+            // Configurar historial
+            window.history.pushState(null, null, window.location.href);
+
+            // Detectar popstate (botón Atrás/Adelante)
+            window.addEventListener('popstate', verificarSesion);
+
+            // Detectar caché del navegador
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    verificarSesion();
+                }
+            });
+
+            function verificarSesion() {
+                fetch('@Url.Action("VerificarSesion", "Acceso")')
+                    .then(response => {
+                        if (!response.ok) {
+                            window.location.replace('@Url.Action("Login", "Acceso")');
+                        } else {
+                            // Mantener en la página
+                            window.history.pushState(null, null, window.location.href);
+                        }
+                    })
+                    .catch(() => {
+                        window.location.replace('@Url.Action("Login", "Acceso")');
+                    });
+            }
+        })();
+    </script>
 </body>
 
 </html>

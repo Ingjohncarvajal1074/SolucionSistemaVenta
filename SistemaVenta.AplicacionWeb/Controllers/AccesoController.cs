@@ -105,5 +105,16 @@ namespace SistemaVenta.AplicacionWeb.Controllers
             }
             return View();
         }
+        
+        [HttpGet]
+        public IActionResult VerificarSesion()
+        {
+            if (!User.Identity?.IsAuthenticated ?? false)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { autenticado = true });
+        }
     }
 }
